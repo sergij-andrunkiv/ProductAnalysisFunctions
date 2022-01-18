@@ -14,6 +14,21 @@ def convert_csv_to_df(csv_name, source_type):
     return df
 
 
-# Test the function on the mobile data
+def check_csv(csv_name):
+    """ Checks if a CSV has three columns: response_date, user_id, nps_rating
+    Args:
+        csv_name (str): The name of the CSV file.
+    Returns:
+        Boolean: True if the CSV is valid, False otherwise. """
+
+    with open(csv_name) as f:
+        first_line = f.readline()
+        if first_line == "response_date,user_id,nps_rating\n":
+            return True
+        else:
+            return False
+
+
+# Test the function on a corrupted NPS file
 if __name__ == '__main__':
-    print(convert_csv_to_df("datasets/2020Q4_nps_mobile.csv", "mobile"))
+    print(check_csv('datasets/corrupted.csv'))
