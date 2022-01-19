@@ -69,6 +69,12 @@ def categorize_nps(x):
 
 
 def calculate_nps(inner_df):
+    """ Takes a dataframe and calculates NPS score
+        Args:
+            inner_df: input DataFrame
+        Returns:
+            float: Score of NPS """
+
     # Calculate the NPS score using the nps_group column
     categories_scores = inner_df.iloc[:, 4].value_counts()
     nps_score = (categories_scores['promoter'] - categories_scores['detractor']) / sum(categories_scores) * 100
@@ -76,16 +82,11 @@ def calculate_nps(inner_df):
 
 
 def calculate_nps_by_source(local_df):
+    """ Takes a dataframe and calculates NPS score for each source
+        Args:
+            local_df: input DataFrame
+        Returns:
+            float: Scores of NPS """
+
     df_grouped = local_df.groupby(['source']).apply(calculate_nps)
     return df_grouped
-
-
-my_files = {
-  "datasets/2020Q4_nps_email.csv": "email",
-  "datasets/2020Q4_nps_web.csv": "web",
-  "datasets/2020Q4_nps_mobile.csv": "mobile",
-}
-# Test the function on the my_files dictionary
-if __name__ == '__main__':
-    q4_nps = combine_nps_csvs(my_files)
-    print(calculate_nps_by_source(q4_nps))
