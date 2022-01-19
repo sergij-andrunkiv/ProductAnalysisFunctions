@@ -11,6 +11,8 @@ def convert_csv_to_df(csv_name, source_type):
 
     df = pd.read_csv(csv_name)
     df['source'] = source_type
+    # Define a new column nps_group which applies categorize_nps to nps_rating
+    df['nps_group'] = df['nps_rating'].apply(categorize_nps)
     return df
 
 
@@ -47,12 +49,24 @@ def combine_nps_csvs(csvs_dict):
     return combined
 
 
-my_files = {
-  "datasets/2020Q4_nps_email.csv": "email",
-  "datasets/2020Q4_nps_mobile.csv": "mobile",
-  "datasets/2020Q4_nps_web.csv": "web",
-  "datasets/corrupted.csv": "social_media"
-}
-# Test the function on the my_files dictionary
+def categorize_nps(x):
+    """ Takes a NPS rating and outputs whether it is a "promoter",
+    "passive", "detractor", or "invalid" rating. "invalid" is
+    returned when the rating is not between 0-10.
+    Args:
+        x: The NPS rating
+    Returns:
+        String: the NPS category or "invalid". """
+
+    if x >= 0 and x <= 6:
+        return 'detractor'
+    elif x == 7 or x == 8:
+        return 'passive'
+    elif x == 9 or x == 10:
+        return 'promoter'
+    else:
+        return 'invalid'
+
+
 if __name__ == '__main__':
-    print(combine_nps_csvs(my_files))
+    print(convert_csv_to_df("datasets/2020Q4_nps_mobile.csv", "mobile"))
