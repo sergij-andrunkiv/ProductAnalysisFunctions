@@ -11,6 +11,8 @@ def convert_csv_to_df(csv_name, source_type):
 
     df = pd.read_csv(csv_name)
     df['source'] = source_type
+    # Define a new column nps_group which applies categorize_nps to nps_rating
+    df['nps_group'] = df['nps_rating'].apply(categorize_nps)
     return df
 
 
@@ -64,3 +66,7 @@ def categorize_nps(x):
         return 'promoter'
     else:
         return 'invalid'
+
+
+if __name__ == '__main__':
+    print(convert_csv_to_df("datasets/2020Q4_nps_mobile.csv", "mobile"))
